@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:unico_check/unico_check.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'unico check',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primaryColor: Color(0xFF0B38E7),
       ),
       home: MyHomePage(title: 'unico | check'),
     );
@@ -28,30 +29,53 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> implements IAcessoBio, IAcessoBioCamera, IAcessoBioDocument{
-@override
+class _MyHomePageState extends State<MyHomePage>
+    implements IAcessoBioSelfie, IAcessoBioDocument {
+  late UnicoCheck unicoCheck;
+  final unicoConfig = UnicoConfig(
+    setTimeoutSession: 50.0,
+    setTimeoutToFaceInference: 16.0,
+    androidColorSilhouetteSuccess: "#03fc73",
+    androidColorSilhouetteError: "#fc0303",
+    iosColorSilhouetteSuccess: "#03fc73",
+    iosColorSilhouetteError: "#fc0303",
+  );
+
+  @override
   void initState() {
     super.initState();
     initAcessoBio();
   }
 
-  late UnicoCheck unicoCheck; 
-
-  Future<void> initAcessoBio() async {
-    unicoCheck = new UnicoCheck(context: this, config: UnicoConfig());
+  void initAcessoBio() {
+    unicoCheck = new UnicoCheck(context: this, config: unicoConfig);
   }
 
-  Future<void> openCamera() async {
+  void openCamera() {
+    unicoCheck.camera!.setAutoCapture(true);
+    unicoCheck.camera!.setSmartFrame(true);
     unicoCheck.camera!.openCamera();
   }
 
-  Future<void> openCameraNormal() async {
-    unicoCheck.camera!.disableSmartFrame();
-    unicoCheck.camera!.disableAutoCapture();
+  void openCameraNormal() {
+    unicoCheck.camera!.setAutoCapture(false);
+    unicoCheck.camera!.setSmartFrame(false);
     unicoCheck.camera!.openCamera();
   }
 
-   Future <void> openCameraDocument() async {
+  void openCameraDocumentCNH() {
+    unicoCheck.document!.openCameraDocument(
+      documentType: DocumentsTypeConstants.cnh,
+    );
+  }
+
+  void openCameraDocumentRGfrente() {
+    unicoCheck.document!.openCameraDocument(
+      documentType: DocumentsTypeConstants.cnh,
+    );
+  }
+
+  void openCameraDocumentRGverso() {
     unicoCheck.document!.openCameraDocument(
       documentType: DocumentsTypeConstants.cnh,
     );
@@ -59,61 +83,82 @@ class _MyHomePageState extends State<MyHomePage> implements IAcessoBio, IAcessoB
 
   @override
   Widget build(BuildContext context) {
- 
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Container(  
-              margin: EdgeInsets.all(25),  
-              child:
-            Text(
-              'Bem-vindo a PoC do unico | check!',
-              style: TextStyle(fontSize: 20.0),
-            ),
-            ),
-            Container(  
-              margin: EdgeInsets.all(25),  
-              child:
-            Text(
-              'Teste nossa tecnologia agora:', 
-              style: TextStyle(fontSize: 15.0),
-            ),
-            ),
-            Container(  
-              margin: EdgeInsets.all(10),  
-              child:
-            FlatButton(
-              onPressed: openCameraNormal, 
-              child: Text('Camera normal'),
-              color: Colors.purple,
-              textColor: Colors.white,
-              
+            Container(
+              margin: EdgeInsets.only(top: 50),
+              child: Text(
+                'Bem-vindo a poc do unico | check !',
+                style: TextStyle(fontSize: 20.0),
               ),
             ),
-            Container(  
-              margin: EdgeInsets.all(10),  
-              child:
-            FlatButton(
-              onPressed: openCamera, 
-              child: Text('Camera inteligente'),
-              color: Colors.purple,
-              textColor: Colors.white
+            Container(
+              margin: EdgeInsets.all(25),
+              child: Text(
+                'Teste agora nossa tecnologia:',
+                style: TextStyle(fontSize: 16.0),
               ),
             ),
-            Container(  
-              margin: EdgeInsets.all(10),  
-              child:
-            FlatButton(
-              onPressed: openCameraDocument, 
-              child: Text('Documentos'),
-              color: Colors.purple,
-              textColor: Colors.white
+            Container(
+              margin: EdgeInsets.only(top: 10, bottom: 10),
+              child: Text(
+                'Camera para selfie',
+                style: TextStyle(fontSize: 15.0),
               ),
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              child: FlatButton(
+                onPressed: openCameraNormal,
+                child: Text('Camera normal'),
+                color: Color(0xFF1172EB),
+                textColor: Colors.white,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              child: FlatButton(
+                  onPressed: openCamera,
+                  child: Text('Camera inteligente'),
+                  color: Color(0xFF1172EB),
+                  textColor: Colors.white),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10, bottom: 10),
+              child: Text(
+                'Camera para documentos',
+                style: TextStyle(fontSize: 15.0),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              child: FlatButton(
+                  onPressed: openCameraDocumentCNH,
+                  child: Text('Documentos CNH'),
+                  color: Color(0xFF1172EB),
+                  textColor: Colors.white),
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              child: FlatButton(
+                  onPressed: openCameraDocumentRGfrente,
+                  child: Text('Documentos RG Frente'),
+                  color: Color(0xFF1172EB),
+                  textColor: Colors.white),
+            ),
+            Container(
+              margin: EdgeInsets.all(10),
+              child: FlatButton(
+                  onPressed: openCameraDocumentRGverso,
+                  child: Text('Documentos RG verso'),
+                  color: Color(0xFF1172EB),
+                  textColor: Colors.white),
             ),
           ],
         ),
@@ -121,53 +166,55 @@ class _MyHomePageState extends State<MyHomePage> implements IAcessoBio, IAcessoB
     );
   }
 
-
-
-  @override
+  ///Acessobio callbacks
   void onErrorAcessoBio(ErrorBioResponse error) {
-      // TODO: implement onErrorAcessoBio
-    }
-  
-    @override
-    void onErrorCamera(ErrorBioResponse error) {
-      // TODO: implement onErrorCamera
-    }
-  
-    @override
-    void onSuccessCamera(CameraResponse response) {
-    // TODO: implement onSuccessCamera
+    showToast("Erro ao abrir a camera: " + error.description);
   }
 
   @override
-  void userClosedCameraManually() {
-    // TODO: implement userClosedCameraManually
-  }
-
-  //override do Documents
-  @override
-  void onErrorDocument(String error) {
-    
+  void onSystemChangedTypeCameraTimeoutFaceInference() {
+    showToast("Sistema trocou o tipo da camera !");
   }
 
   @override
-  void onErrorFaceMatch(String error) {
-    
+  void onSystemClosedCameraTimeoutSession() {
+    showToast("Sistema fechou a camera !");
   }
 
   @override
-  void onErrorOCR(String error) {
-    
+  void onUserClosedCameraManually() {
+    showToast("Usuario fechou camera manualmente !");
+  }
+
+  ///Selfie callbacks
+  @override
+  void onSuccessSelfie(CameraResponse response) {
+    showToast("Sucesso na captura, aqui temos o base64");
   }
 
   @override
-  void onSuccessFaceMatch(FacematchResponse response) {
-    
+  void onErrorSelfie(ErrorBioResponse error) {
+    showToast("Erro ao abrir a camera: " + error.description);
+  }
+
+  ///Document callbacks
+  @override
+  void onSuccessDocument(CameraDocumentResponse response) {
+    showToast("Sucesso na captura, aqui temos o base64");
   }
 
   @override
-  void onSuccesstDocument(CameraDocumentResponse response) {
-    
+  void onErrorDocument(ErrorBioResponse error) {
+    showToast("Erro ao abrir a camera: " + error.description);
   }
 
-
+  void showToast(String msg) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.amber,
+      fontSize: 14,
+    );
+  }
 }
