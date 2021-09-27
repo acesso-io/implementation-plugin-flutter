@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:unico_check/unico_check.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,6 +22,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -33,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> implements IAcessoBio, IAcessoB
   void initState() {
     super.initState();
     initAcessoBio();
+    
   }
 
   late UnicoCheck unicoCheck; 
@@ -112,9 +118,16 @@ class _MyHomePageState extends State<MyHomePage> implements IAcessoBio, IAcessoB
               onPressed: openCameraDocument, 
               child: Text('Documentos'),
               color: Colors.purple,
-              textColor: Colors.white
+              textColor: Colors.white,
               ),
             ),
+            Container( 
+              child: 
+              FlatButton(
+                onPressed: null, 
+                child: Text('oi'),
+                )  
+              ),
           ],
         ),
       ),
@@ -159,14 +172,24 @@ class _MyHomePageState extends State<MyHomePage> implements IAcessoBio, IAcessoB
     
   }
 
-  @override
-  void onSuccessFaceMatch(FacematchResponse response) {
+  // @override
+  // void onSuccessFaceMatch(FacematchResponse response) {
     
-  }
+  // }
 
   @override
   void onSuccesstDocument(CameraDocumentResponse response) {
     
+  }
+
+  @override
+  void systemChangedTypeCameraTimeoutFaceInference() {
+    // TODO: implement systemChangedTypeCameraTimeoutFaceInference
+  }
+
+  @override
+  void systemClosedCameraTimeoutSession() {
+    // TODO: implement systemClosedCameraTimeoutSession
   }
 
 

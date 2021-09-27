@@ -23,13 +23,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    unico_check: ^1.0.2
+   
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  unico_check: ^1.0.2
+  unico_check: ^2.0.0-beta.3
+  webview_flutter: ^2.0.10
+  url_launcher: ^6.0.9
 
 dev_dependencies:
   flutter_test:
